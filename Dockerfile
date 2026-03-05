@@ -7,9 +7,13 @@ RUN apk add --no-cache nodejs npm && npm install -g pnpm
 COPY --chown=1000:1000 logo.png /app/app/javascript/design-system/images/logo.png
 COPY --chown=1000:1000 logo-dark.png /app/app/javascript/design-system/images/logo-dark.png
 
-RUN chown -R 1000:1000 /app/tmp /app/public /app/app/javascript/design-system/images/
+RUN chown -R 1000:1000 /app/tmp /app/public /app/app/javascript/design-system/images/ && \
+    mkdir -p /home/chatwoot/.local/share/pnpm && \
+    chown -R 1000:1000 /home/chatwoot
 
 USER 1000
+
+ENV PNPM_HOME=/home/chatwoot/.local/share/pnpm
 
 RUN cd /app && \
     pnpm install && \
