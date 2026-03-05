@@ -4,11 +4,13 @@ USER root
 
 RUN apk add --no-cache nodejs npm && npm install -g pnpm
 
-COPY logo.png /app/app/javascript/design-system/images/logo.png
-COPY logo-dark.png /app/app/javascript/design-system/images/logo-dark.png
+COPY --chown=1000:1000 logo.png /app/app/javascript/design-system/images/logo.png
+COPY --chown=1000:1000 logo-dark.png /app/app/javascript/design-system/images/logo-dark.png
+
+RUN chown -R 1000:1000 /app/tmp /app/public /app/app/javascript/design-system/images/
+
+USER 1000
 
 RUN cd /app && \
     pnpm install && \
     bundle exec rake assets:precompile RAILS_ENV=production SECRET_KEY_BASE=dummy NODE_ENV=production
-
-USER 1000
